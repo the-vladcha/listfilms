@@ -13,6 +13,7 @@
     <p>{{ item.year }}, {{ item.country }}, {{ item.genre.all|join:', ' }}</p>
     <p>Режиссер: {{ item.director }}</p>
     <p>В ролях: {{ item.actors.all|join:', ' }}</p>
+    <p>{{ item.created_at }}</p>
 </div>
 <hr>
 {% endfor %}
