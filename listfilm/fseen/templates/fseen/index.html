@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+
+{% for item in films %}
+<div>
+    <p>{{ item.title }}</p>
+    <p>{{ item.year }}, {{ item.country }}, {{ item.genre.all|join:', ' }}</p>
+    <p>Режиссер: {{ item.director }}</p>
+    <p>В ролях: {{ item.actors.all|join:', ' }}</p>
+</div>
+<hr>
+{% endfor %}
+
+
+</body>
+</html>
