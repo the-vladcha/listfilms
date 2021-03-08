@@ -8,6 +8,7 @@
 
 {% for item in films %}
 <div>
+    <p>{{ item.photo }}</p>
     <p>{{ item.title }}</p>
     <p>{{ item.year }}, {{ item.country }}, {{ item.genre.all|join:', ' }}</p>
     <p>Режиссер: {{ item.director }}</p>
