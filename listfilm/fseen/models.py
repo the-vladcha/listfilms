@@ -1,14 +1,6 @@
 from django.db import models
 from django.urls import reverse
 
-'''
-Film
-=============
-
-
-
-'''
-
 
 class Category(models.Model):
     title = models.CharField(max_length=50, verbose_name='Название')
@@ -39,7 +31,7 @@ class Genre(models.Model):
     class Meta:
         verbose_name = 'Жанр'
         verbose_name_plural = 'Жанры'
-        ordering = ['title']
+        # ordering = ['title']
 
 
 class Director(models.Model):
@@ -71,7 +63,7 @@ class Actor(models.Model):
     class Meta:
         verbose_name = 'Актер'
         verbose_name_plural = 'Актеры'
-        ordering = ['name']
+        # ordering = ['name']
 
 
 class Film(models.Model):
