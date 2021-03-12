@@ -89,7 +89,7 @@ class Film(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('film', kwargs={'slug': self.slug})
+        return reverse('view_film', kwargs={'slug': self.slug})
 
     class Meta:
         verbose_name = 'Фильм'

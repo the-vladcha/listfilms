@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }} :: {{ block.super }}
+{% endblock %}
+{% block content %}
+{% for item in films %}
+<div class="col-md-3 g-4">
+            <div class="card mb-3 h-100" style="width: 18rem;">
+                <a href="#"><img src="{{ item.photo }}" class="card-img-top" alt="not found"></a>
+                <div class="card-body">
+                    <h5 class="card-title"><a href="#" class="card-link">{{ item.title }}</a></h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Год: {{ item.year }}</li>
+                    <li class="list-group-item">Жанр: {{ item.genre.all|join:", " }}</li>
+                    <li class="list-group-item">Режиссер: {{ item.director }}</li>
+                    <li class="list-group-item">В главной роли: {{ item.actors.all|join:", " }}</li>
+                </ul>
+            </div>
+        </div>
+{% endfor %}
+{% endblock %}
