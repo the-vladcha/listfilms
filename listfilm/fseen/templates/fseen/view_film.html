@@ -11,8 +11,7 @@
   <div class="card-body">
     <h5 class="card-title">{{ film_item.title }}</h5>
     <p class="card-title">{{ film_item.year }}, {{ film_item.country }}, {{ film_item.genre.all|join:", " }}</p>
-    <p class="card-title">Режисер: {{ film_item.director }}</p>
-    <p class="card-title">В главной роли: {{ film_item.actors.all|join:", " }}</p>
+    <p class="card-title">{{ film_item.director }}, {{ film_item.actors.all|join:", " }}</p>
     <p class="card-title">Рейтинг: {{ film_item.rating }}</p>
     <p class="card-text"></p>
     <p class="card-text"><small class="text-muted">{{ film_item.updated_at }}</small></p>
