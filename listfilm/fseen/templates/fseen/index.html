@@ -10,13 +10,13 @@
     <div class="card mb-3 h-100" style="width: 18rem;">
         <a href="{{ item.get_absolute_url }}"><img src="{{ item.photo }}" class="card-img-top" alt="not found"></a>
         <div class="card-body">
-            <h5 class="card-title"><a href="{{ item.get_absolute_url }}" class="card-link">{{ item.title }}</a></h5>
+            <h5 class="card-title" style="height: 2em;"><a href="{{ item.get_absolute_url }}" class="card-link">{{ item.title }}</a></h5>
         </div>
         <ul class="list-group list-group-flush">
             <li class="list-group-item">Год: {{ item.year }}</li>
-            <li class="list-group-item">Жанр: {{ item.genre.all|join:", " }}</li>
+            <li class="list-group-item" style="height: 4em;">Жанр: {{ item.genre.all|join:", " }}</li>
             <li class="list-group-item">Режиссер: {{ item.director }}</li>
-            <li class="list-group-item">В главной роли: {{ item.actors.all|join:", " }}</li>
+            <li class="list-group-item" style="height: 6em;">В главной роли: {{ item.actors.all|join:", " }}</li>
         </ul>
     </div>
 </div>
