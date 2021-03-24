@@ -69,86 +69,86 @@ class ParserIvi:
             item += 1
             req = requests.get(url, self.headers)
             src = req.text
-            soup = BeautifulSoup(src, 'lxml')
+            self.soup = BeautifulSoup(src, 'lxml')
 
             # Проверка наличия страницы
-            top_info = soup.find('div', class_='topInfo__grid')
+            top_info = self.soup.find('div', class_='topInfo__grid')
             if top_info is not None:
                 print('Страница не найдена')
                 break
-
-            all_films = soup.find('ul', class_='gallery_adaptive').find_all('a', class_='item-content-wrapper')
-            for film in all_films:
-                title = film.find('img').get('alt')
-                if Film.objects.filter(title=title).exists() is False:
-                    link = self.url + film.get('href')
-                    self.parser_block(link, title)
-                    # Генератор, останавливает работу скрипта после вывода трех фильмов и начинает следующ
-                    if (all_films.index(film) + 1) % 2 == 0:
-                        yield
+            self.parser_block()
 
     # Парсинг страницы одного фильма
     @counter
     # @csv_save
-    def parser_block(self, link, title):
-        req = requests.get(link, self.headers)
-        src = req.text
-        soup = BeautifulSoup(src, 'lxml')
-        persons = soup('div', class_='fixedSlimPosterBlock__textSection', limit=4)
-        director = ''
-        actors = []
-        for person in persons:
-            try:
-                somebody = person.find(class_='fixedSlimPosterBlock__title').string + ' ' + person.find(
-                    class_='fixedSlimPosterBlock__secondTitle').string
-            except AttributeError:
-                somebody = person.find(class_='fixedSlimPosterBlock__title').string
-            if person == persons[0]:
-                director = somebody
-            else:
-                actors.append(somebody)
+    def parser_block(self):
+        all_films = self.soup.find('ul', class_='gallery_adaptive').find_all('a', class_='item-content-wrapper')
+        for film in all_films:
+            title = film.find('img').get('alt')
+            if Film.objects.filter(title=title).exists() is False:
+                link = self.url + film.get('href')
+                self.parser_block(link, title)
+                # Генератор, останавливает работу скрипта после вывода трех фильмов и начинает следующ
+                if (all_films.index(film) + 1) % 2 == 0:
+                    yield
+                req = requests.get(link, self.headers)
+                src = req.text
+                soup = BeautifulSoup(src, 'lxml')
+                persons = soup('div', class_='fixedSlimPosterBlock__textSection', limit=4)
+                director = ''
+                actors = []
+                for person in persons:
+                    try:
+                        somebody = person.find(class_='fixedSlimPosterBlock__title').string + ' ' + person.find(
+                            class_='fixedSlimPosterBlock__secondTitle').string
+                    except AttributeError:
+                        somebody = person.find(class_='fixedSlimPosterBlock__title').string
+                    if person == persons[0]:
+                        director = somebody
+                    else:
+                        actors.append(somebody)
 
-        parameters_info = [i for i in soup.find(class_='parameters__info').strings if i != ', ']
-        year = parameters_info[0]
-        country = parameters_info[1]
-        genre_tags = parameters_info[2:]
-        genres = []
-        for genre in genre_tags:
-            genres.append(genre.string)
+                parameters_info = [i for i in soup.find(class_='parameters__info').strings if i != ', ']
+                year = parameters_info[0]
+                country = parameters_info[1]
+                genre_tags = parameters_info[2:]
+                genres = []
+                for genre in genre_tags:
+                    genres.append(genre.string)
 
-        rating = soup.find(class_='nbl-ratingAmple__valueInteger').text + soup.find(
-            class_='nbl-ratingAmple__valueFraction').text
-        poster = soup.find('video-info').get('data-poster')
-        category = soup.find('ul', class_='headerBar__breadCrumbs').contents[1].find('span').string
+                rating = soup.find(class_='nbl-ratingAmple__valueInteger').text + soup.find(
+                    class_='nbl-ratingAmple__valueFraction').text
+                poster = soup.find('video-info').get('data-poster')
+                category = soup.find('ul', class_='headerBar__breadCrumbs').contents[1].find('span').string
 
-        # Проверка наличия Режиссера в базе данных
-        if Director.objects.filter(name=director).exists() is False:
-            Director(name=director, slug=slugify(director)).save()
+                # Проверка наличия Режиссера в базе данных
+                if Director.objects.filter(name=director).exists() is False:
+                    Director(name=director, slug=slugify(director)).save()
 
-        # Сохранение информации о фильме в базе данных
-        new_film = Film(title=title,
-                        slug=slugify(title),
-                        year=year,
-                        country=country,
-                        photo=poster,
-                        rating=rating,
-                        category=Category.objects.get(title=category),
-                        director=Director.objects.get(name=director))
-        new_film.save()
-        new_film = Film.objects.get(title=title, year=year)
+                # Сохранение информации о фильме в базе данных
+                new_film = Film(title=title,
+                                slug=slugify(title),
+                                year=year,
+                                country=country,
+                                photo=poster,
+                                rating=rating,
+                                category=Category.objects.get(title=category),
+                                director=Director.objects.get(name=director))
+                new_film.save()
+                new_film = Film.objects.get(title=title, year=year)
 
-        # Сохранение актеров фильма в базу данных
-        for actor in actors:
-            if Actor.objects.filter(name=actor).exists() is False:
-                Actor(name=actor, slug=slugify(actor)).save()
-            new_film.actors.add(Actor.objects.get(name=actor))
-            new_film.save()
-        # Сохранение жанров фильма в базу данных
-        for genre in genres:
-            if Genre.objects.filter(title=genre).exists() is False:
-                Genre(title=genre, slug=slugify(genre)).save()
-            new_film.genre.add(Genre.objects.get(title=genre))
-            new_film.save()
+                # Сохранение актеров фильма в базу данных
+                for actor in actors:
+                    if Actor.objects.filter(name=actor).exists() is False:
+                        Actor(name=actor, slug=slugify(actor)).save()
+                    new_film.actors.add(Actor.objects.get(name=actor))
+                    new_film.save()
+                # Сохранение жанров фильма в базу данных
+                for genre in genres:
+                    if Genre.objects.filter(title=genre).exists() is False:
+                        Genre(title=genre, slug=slugify(genre)).save()
+                    new_film.genre.add(Genre.objects.get(title=genre))
+                    new_film.save()
 
 
 class Command(BaseCommand):
