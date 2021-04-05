@@ -1,5 +1,7 @@
 from django.db import models
 from django.urls import reverse
+from phonenumber_field.modelfields import PhoneNumberField
+from django.contrib.auth.models import User
 
 
 class Category(models.Model):
@@ -95,3 +97,11 @@ class Film(models.Model):
         verbose_name = 'Фильм'
         verbose_name_plural = 'Фильмы'
         ordering = ['title']
+
+
+class MyUser(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    phone_number = PhoneNumberField(null=False, blank=False, unique=True, verbose_name='Телефон')
+
+    def __str__(self):
+        return self.user.username
