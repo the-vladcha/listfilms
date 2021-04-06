@@ -7,7 +7,9 @@
 {% block content %}
 <div class="col-md-12">
 <div class="card mb-3">
-  <img src="{{ film_item.photo }}" class="card-img-top" alt="..." height="200">
+  <div style="height:200px; overflow:hidden;">
+  <img src="{{ film_item.photo }}" class="card-img-top" alt="...">
+  </div>
   <div class="card-body">
     <h5 class="card-title">{{ film_item.title }}</h5>
     <p class="card-title">{{ film_item.year }}, {{ film_item.country }}, {{ film_item.genre.all|join:", " }}</p>

@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'debug_toolbar',
     'fseen.apps.FseenConfig',
+    'phonenumber_field',
+    'captcha',
 
 ]
 
@@ -135,3 +137,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 INTERNAL_IPS = ['127.0.0.1']
+
+RECAPTCHA_PUBLIC_KEY = '6LcpP5EaAAAAAEO9zGZCT2QkqvuPhhCdd4lQ_Ofs'
+RECAPTCHA_PRIVATE_KEY = '6LcpP5EaAAAAAMaSWHcqnKHZAVcBmwzDx6HYw6e3'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587  # 2525
+EMAIL_HOST_USER = 'porokhov.vlad@gmail.com'   # Write here your email (google)
+EMAIL_HOST_PASSWORD = ''   # Write here your password
+EMAIL_USE_TLS = True

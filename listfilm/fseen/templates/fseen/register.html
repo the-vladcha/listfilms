@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Регистрация :: TC{% endblock %}
+
+{% block content %}
+<div class="position-relative">
+    <div class="position-absolute top-0 start-50 translate-middle-x">
+        <div class="card p-3" style="width: 30rem; background-color: #c8e5fa;">
+
+            <h1>Регистрация</h1>
+
+            <form method="post">
+                {% csrf_token %}
+
+                {{ form.as_p }}
+                {% if messages %}
+                {% for message in messages %}
+                {{ message }}
+                {% endfor %}
+                {% endif %}
+                <button type="submit" class="btn btn-primary btn-block">Регистрация</button>
+            </form>
+            <br>
+            <p><a href="{% url 'reset_password' %}">Забыли пароль?</a></p>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

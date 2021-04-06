@@ -15,6 +15,22 @@
                 {% endfor %}
                 <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Добавить фильм</a></li>
             </ul>
+
+            <ul class="nav justify-content-end">
+                {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register' %}">Регистрация</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Авторизация</a>
+                </li>
+                {% endif %}
+
+            </ul>
         </div>
     </div>
 </nav>
