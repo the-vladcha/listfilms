@@ -4,7 +4,7 @@ from .models import Film, Category, MyUser
 from django.core.mail import EmailMessage
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.views.generic import View
+from django.views.generic import View, TemplateView
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 
@@ -103,7 +103,7 @@ class RegistrationView(View):
                 [new_user.email],
             )
             email.send(fail_silently=False)
-            return redirect('home')
+            return redirect('email_confirm')
         context = {'form': form}
         return render(request, 'fseen/register.html', context)
 
